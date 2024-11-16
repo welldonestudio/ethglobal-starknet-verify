@@ -2,12 +2,14 @@ import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/com
 import { StarknetVerificationService } from './starknet-verification.service';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
 import { StarknetVerificationUploadReqDto } from './dto/starknet-verification-upload-req.dto';
 import { StarknetVerificationUploadResultDto } from './dto/starknet-verification-upload-result.dto';
 import { diskStorage } from 'multer';
 import { StarknetHelper } from './starknet-helper';
 import { S3Service } from '../infra/s3/s3.service';
+import { StarknetVerificationReqDto } from './dto/starknet-verification-req.dto';
+import { StarknetVerificationResultDto } from './dto/starknet-verification-result.dto';
 
 @Controller('starknet')
 export class StarknetVerificationController {
@@ -56,5 +58,20 @@ export class StarknetVerificationController {
     return {
       srcFileId: result.srcFileId,
     };
+  }
+
+  @Post('verifications')
+  @ApiBody({
+    type: StarknetVerificationReqDto,
+  })
+  @ApiCreatedResponse({ type: StarknetVerificationResultDto })
+  async verifyStarknetContract(@Body() req: StarknetVerificationReqDto): Promise<StarknetVerificationResultDto> {
+    return await this.starknetVerificationService.verifyCairoContract(
+      req.contractAddress,
+      req.chainId,
+      req.srcFileId,
+      req.scarbVersion,
+      req.verifyRequestAddress,
+    );
   }
 }

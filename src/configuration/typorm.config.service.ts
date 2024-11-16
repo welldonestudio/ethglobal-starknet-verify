@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { StarknetVerifyHistory } from '../starknet/starknet-verify-history.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -18,7 +19,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       namingStrategy: new SnakeNamingStrategy(),
       synchronize: false,
       autoLoadEntities: false,
-      entities: [],
+      entities: [StarknetVerifyHistory],
       logging: true,
     };
   }

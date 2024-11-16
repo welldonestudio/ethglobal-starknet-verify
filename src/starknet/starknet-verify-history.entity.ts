@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { StarknetVerifyHistoryCreateVo } from './vo/starknet-verify-history-create.vo';
 
 @Entity('starknet_verify_history')
 export class StarknetVerifyHistory {
@@ -37,4 +38,20 @@ export class StarknetVerifyHistory {
 
   @CreateDateColumn({ type: 'datetime', nullable: true })
   updatedAt: Date | null;
+
+  static create(vo: StarknetVerifyHistoryCreateVo) {
+    const starknetVerifyHistory = new StarknetVerifyHistory();
+    starknetVerifyHistory.chainId = vo.chainId;
+    starknetVerifyHistory.contractAddress = vo.contractAddress;
+    starknetVerifyHistory.classHash = vo.classHash;
+    starknetVerifyHistory.compiledClassHash = vo.compiledClassHash;
+    starknetVerifyHistory.declareTxHash = vo.declareTxHash;
+    starknetVerifyHistory.compileTimestamp = vo.compileTimestamp;
+    starknetVerifyHistory.verifiedTimestamp = vo.verifiedTimestamp;
+    starknetVerifyHistory.scarbVersion = vo.scarbVersion;
+    starknetVerifyHistory.verifyRequestAddress = vo.verifyRequestAddress;
+    starknetVerifyHistory.createdAt = new Date();
+    starknetVerifyHistory.updatedAt = new Date();
+    return starknetVerifyHistory;
+  }
 }
