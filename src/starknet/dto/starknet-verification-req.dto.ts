@@ -11,14 +11,6 @@ export class StarknetVerificationReqDto {
   contractAddress: string;
 
   @ApiProperty({
-    name: 'declareTxHash',
-    required: true,
-    example: '0x29ef688a01fd5c0dc4587bb14cefd06a707c583befef6d523fcd1e47d4cdeef',
-  })
-  @IsNotEmpty()
-  declareTxHash: string;
-
-  @ApiProperty({
     name: 'scarbVersion',
     required: true,
     example: '2.8.0',

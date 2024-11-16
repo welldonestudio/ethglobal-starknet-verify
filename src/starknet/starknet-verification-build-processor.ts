@@ -86,16 +86,17 @@ export class StarknetVerificationBuildProcessor {
       fs.rmSync(macosxDir, { recursive: true, force: true });
     }
 
-    const filesInExtractDir = fs.readdirSync(extractDir);
+    // const filesInExtractDir = fs.readdirSync(extractDir);
 
-    const extractedDir = filesInExtractDir.find((file) => {
-      const fullPath = path.join(extractDir, file);
-      return fs.statSync(fullPath).isDirectory();
-    });
+    // const extractedDir = filesInExtractDir.find((file) => {
+    //   const fullPath = path.join(extractDir, file);
+    //   return fs.statSync(fullPath).isDirectory();
+    // });
+    // console.
 
-    if (!extractedDir) {
-      throw new Error('No directory found in the extracted contents.');
-    }
-    return path.join(extractDir, extractedDir);
+    // if (!extractedDir) {
+    //   throw new Error('No directory found in the extracted contents.');
+    // }
+    return extractDir;
   }
 }

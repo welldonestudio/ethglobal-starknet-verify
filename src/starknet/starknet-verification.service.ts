@@ -56,8 +56,6 @@ export class StarknetVerificationService {
 
     const getCompiledClassHash = await this.getStrkCompiledClassHash(declareTransactionHash, chainId);
 
-    await this.saveSrcFile({ chainId, contractAddress, timestamp });
-
     const compileTime = new Date();
     const { sierraClassHash, compiledClassHash, compiledSierraABI, sierraFileName } =
       await this.starknetVerificationBuildProcessor.compileCairoSierra(
@@ -67,6 +65,10 @@ export class StarknetVerificationService {
         scarbVersion,
       );
 
+    console.log('getClassHashAt: ', getClassHashAt);
+    console.log('sierraClassHash: ', sierraClassHash);
+    console.log('getCompiledClassHash: ', getCompiledClassHash);
+    console.log('compiledClassHash: ', compiledClassHash);
     console.log(`@@@ chainId=${chainId}, contractAddress=${contractAddress}, timestamp=${timestamp}`);
     if (getClassHashAt !== sierraClassHash && getCompiledClassHash !== compiledClassHash) {
       return {
