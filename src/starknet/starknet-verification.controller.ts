@@ -1,8 +1,8 @@
-import { Body, Controller, HttpStatus, Post, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Query, UseInterceptors } from '@nestjs/common';
 import { StarknetVerificationService } from './starknet-verification.service';
 import * as fs from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiCreatedResponse, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { StarknetVerificationUploadReqDto } from './dto/starknet-verification-upload-req.dto';
 import { StarknetVerificationUploadResultDto } from './dto/starknet-verification-upload-result.dto';
 import { diskStorage } from 'multer';
@@ -73,5 +73,28 @@ export class StarknetVerificationController {
       req.scarbVersion,
       req.verifyRequestAddress,
     );
+  }
+
+  @Get('verifications')
+  @ApiQuery({
+    name: 'chainId',
+    required: true,
+    example: '0x534e5f5345504f4c4941',
+  })
+  @ApiQuery({
+    name: 'contractAddress',
+    required: true,
+    example: '0x04f65a8f5198d5883c8784f4de644d0caca7c34a4c2b7dcfe333013e63979eb7',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Get cairo verification result',
+    type: StarknetVerificationResultDto,
+  })
+  async verifyCheck(
+    @Query('chainId') chainId: string,
+    @Query('contractAddress') contractAddress: string,
+  ): Promise<StarknetVerificationResultDto> {
+    return await this.starknetVerificationService.verifyCheck(chainId, contractAddress);
   }
 }

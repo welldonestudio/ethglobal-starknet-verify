@@ -213,6 +213,36 @@ export class StarknetVerificationService {
     }
   }
 
+  async verifyCheck(chainId: string, contractAddress: string) {
+    console.log(`@@@ chainId=${chainId}, contractAddress=${contractAddress}`);
+    const starknetEntity = await this.starknetVerifyHistoryRepository.findOne({
+      where: {
+        chainId: chainId,
+        contractAddress: contractAddress,
+      },
+    });
+
+    if (!starknetEntity) {
+      return {
+        chainId: chainId,
+        contractAddress: contractAddress,
+        errMsg: `Not found contract verification history. chainId=${chainId}, contractAddress=${contractAddress}`,
+      };
+    }
+
+    const verifiedSrcUrl = await this.verifiedStarknetSrcDownloadUrl(starknetEntity);
+    const verifiedOutUrl = await this.verifiedStarknetOutDownloadUrl(starknetEntity);
+
+    return {
+      chainId: chainId,
+      contractAddress: contractAddress,
+      declareTxHash: starknetEntity.declareTxHash,
+      verifiedSrcUrl: verifiedSrcUrl,
+      verifyRequestAddress: starknetEntity.verifyRequestAddress,
+      outFileUrl: verifiedOutUrl,
+    };
+  }
+
   private async saveSrcFile({
     chainId,
     contractAddress,
