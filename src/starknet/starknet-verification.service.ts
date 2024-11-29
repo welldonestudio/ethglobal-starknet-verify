@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import { StarknetHelper } from './starknet-helper';
 import { lastValueFrom, map } from 'rxjs';
 import { S3Path } from '../infra/s3/s3-path';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class StarknetVerificationService {
@@ -18,6 +19,7 @@ export class StarknetVerificationService {
     private readonly starknetVerificationBuildProcessor: StarknetVerificationBuildProcessor,
     private readonly httpService: HttpService,
     private readonly s3Service: S3Service,
+    private readonly configService: ConfigService,
   ) {}
 
   async verifyCairoContract(
@@ -65,11 +67,6 @@ export class StarknetVerificationService {
         scarbVersion,
       );
 
-    console.log('getClassHashAt: ', getClassHashAt);
-    console.log('sierraClassHash: ', sierraClassHash);
-    console.log('getCompiledClassHash: ', getCompiledClassHash);
-    console.log('compiledClassHash: ', compiledClassHash);
-    console.log(`@@@ chainId=${chainId}, contractAddress=${contractAddress}, timestamp=${timestamp}`);
     if (getClassHashAt !== sierraClassHash && getCompiledClassHash !== compiledClassHash) {
       return {
         chainId: chainId,
@@ -135,9 +132,10 @@ export class StarknetVerificationService {
       throw new Error('Invalid Starknet chain id');
     }
 
+    const voyagerApiKey = process.env.VOYAGER_API_KEY;
     const headersRequest = {
       'Content-Type': 'application/json', // afaik this one is not needed
-      'x-apikey': 'avL8ol0p8tVlJzmvoSA2iN0CeLODmQEuV2DMEncG7dmSX2qYoBgwMeqrfhKrz6LM',
+      'x-apikey': voyagerApiKey,
     };
     const requestBody = {
       method: 'starknet_getClassHashAt',

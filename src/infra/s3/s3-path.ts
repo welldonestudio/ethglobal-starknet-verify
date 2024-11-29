@@ -1,6 +1,6 @@
 export class S3Path {
   static manualUploadVerificationBucket() {
-    return 'wds-code-verification-dev';
+    return 'wds-code-verification';
   }
 
   static s3CairoZipSrcFilesKey(chainId: string, contractAddress: string, timestamp: string | undefined) {

@@ -2,7 +2,7 @@ const BASE_PATH = process.cwd();
 
 export class StarknetHelper {
   static s3VerificationSrcBucket() {
-    return 'wds-code-verification-dev';
+    return 'wds-code-verification';
   }
 
   static s3VerificationSrcZipFileKey(chainId: string, contractAddress: string, timestamp: string) {
